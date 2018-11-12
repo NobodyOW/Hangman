@@ -1,0 +1,174 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+from turtle import *
+from random import randint
+import time
+import math
+
+
+
+s=getscreen()
+sw = 400
+sh = 400
+s.setup(sw,sh)
+s.bgcolor('blue')
+t1=getturtle()
+t1.speed(0)
+tWriter=Turtle()
+tBad=Turtle()
+tBad.speed(0)
+#Game variables
+alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+newText=" "
+#l = ""
+lettersWrong = ""
+lettersCorrect = ""
+secretWord=""
+displayWord=""
+dCounter = 7 #How many body parts
+fails = 7 #How many fails
+wordList = ['Math','Logic','Test','Random','Sold','Bazinga','Volcano','Been',"6am","Dab","Omegalul","pepeHands"]
+fontS = int(sh*0.05)
+
+def lose():
+  print "You lose, the secret work was " + secretWord
+def chooseSecretWord():
+  global secretWord
+  secretWord = wordList[randint(0, len(wordList)-1)]
+  #cbprint("The secret word is " + secretWord)
+def displayText(newText):
+  tWriter.clear()
+  tWriter.penup()
+  tWriter.goto(-int(sw*0.4), -int(sh*0.4))
+  tWriter.write(newText, font=("Arial", fontS , "bold"))
+
+def displayBad(newTest):
+  tBad.clear()
+  tBad.penup()
+  tBad.goto(-int(sw*0.4), -int(sh*0.36))
+  tBad.write( newText, font=("Arial", fontS , "bold"))
+  
+  
+def makeWordString():
+  global displayWord, alpha
+  displayWord= ""
+  for l in secretWord:
+    if str(l) in alpha:
+      if str(l).lower() in lettersCorrect.lower():
+        displayWord += str(l) + " "
+      else:
+        displayWord += "_" + " "
+    else:
+      displayWord += str(l) + " "
+#------------------------------------------LINE-----------------------------
+def drawGallows():
+  t1.width(5)
+  t1.color('black')
+  t1.penup()
+  t1.goto(-int(sw/4), -int(sh/4))
+  t1.setheading(0)
+  t1.pendown()
+  t1.forward(int(sw/2))
+  t1.left(90)
+  t1.forward(int(sh/1.5))
+  t1.left(90)
+  t1.forward(int(sw/3.8))
+  t1.left(90)
+  t1.forward(sh/10)
+  #Function for gallows, SH is screenheight, SW is screenwidth
+
+def drawHead():
+  t1.right(90)
+  for i in range(180):
+    t1.left(2)
+    t1.forward(sw/550)
+  for i in range(90):
+    t1.left(2)
+    t1.forward(sw/550)
+  t1.right(90)
+  
+def drawTorso():
+    t1.forward(sw/5)
+  
+def drawRArm():
+  t1.left(95)
+  t1.forward(sw/6)
+  t1.left(180)
+  t1.forward(sw/6)
+  t1.right(95)
+  
+def drawLArm():
+  t1.left(85)
+  t1.forward(sw/6)
+  t1.right(180)
+  t1.forward(sw/6)
+  t1.right(85)
+  
+def drawLLeg():
+  t1.right(5)
+  t1.forward(sh/5.5)
+  t1.right(180)
+  t1.forward(sh/5.5)
+
+def drawRLeg():
+  t1.left(191)
+  t1.forward(sh/5.5)
+  t1.left(180)
+  t1.forward(sh/5.5)
+def updateHangman():
+  if dCounter == 6:
+    drawHead()
+  if dCounter == 5:      
+    drawRArm()
+  if dCounter == 4:
+    drawLArm()
+  if dCounter == 3: 
+    drawTorso()
+  if dCounter == 2:
+    drawLLeg()
+  if dCounter == 1:
+    drawRLeg()
+#Game setup
+drawGallows()
+chooseSecretWord()
+displayText("Guess a letter...")
+displayBad("Not in word: [" + lettersWrong + "]")
+time.sleep(1)
+displayText(displayWord)
+makeWordString()
+displayText(displayWord)
+
+t1.clear()
+drawGallows()
+
+turns = 100
+for i in range(turns):
+  if fails == 0:
+    lose()
+    break
+  Guess = input("Guess a letter or the word")
+  if len(Guess) > 1:
+    if Guess.lower() == str(secretWord).lower():
+      displayText(secretWord)
+      print "You win!"
+      break
+      break
+    else:
+      lose()
+      break
+  else:
+    if Guess.lower() in secretWord.lower():
+      for i in range(len(secretWord)):
+        if secretWord[i].lower() == Guess.lower():
+          lettersCorrect += Guess.lower() 
+          makeWordString()
+          displayText(displayWord)
+          if "_" not in displayWord:
+            print "You win!"
+            break
+    else:
+      dCounter = dCounter- 1
+      fails = fails - 1
+      print Guess + " is not in the word"
+      updateHangman()
