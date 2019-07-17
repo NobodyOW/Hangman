@@ -28,7 +28,7 @@ secretWord=""
 displayWord=""
 dCounter = 7 #How many body parts
 fails = 7 #How many fails
-wordList = ['Math','Logic','Test','Random','Sold','Bazinga','Volcano','Been',"6am","Dab","Omegalul","pepeHands"]
+wordList = ['Math','Logic','Test','Random','Sold','Bazinga','Volcano','Been','6am','Ice','Blue','Green']
 fontS = int(sh*0.05)
 
 def lose():
